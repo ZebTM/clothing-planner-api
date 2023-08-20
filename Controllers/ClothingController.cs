@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ClothingPlanner.Models;
-using ClothingPlanner.DatabaseContext;
+using ClothingPlanner.Repository;
 
 namespace ClothingPlanner.Controllers;
 
@@ -8,11 +7,21 @@ namespace ClothingPlanner.Controllers;
 [Route("[controller]")]
 public class ClothingController : ControllerBase
 {
-    private readonly MyDatabaseContext _dbContext;
-    public ClothingController(MyDatabaseContext dbContext)
+    private IClothingRepository clothingRepository; 
+    public ClothingController(IClothingRepository clothingRepository)
     {
-        _dbContext = dbContext;
+        this.clothingRepository = clothingRepository;
     }   
 
+    [HttpGet]
+    public async Task<IActionResult> GetClothing()
+    {
+        try {
+            return Ok(clothingRepository.GetClothing());
+        } catch (Exception e )
+        {
+            return BadRequest(e);
+        }
+    }
     
 }

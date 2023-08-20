@@ -18,11 +18,6 @@ public class MyDatabaseContext : DbContext
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ClothingPlannerDatabase"));
     }
 
-    // protected override void OnModelCreating(ModelBuilder modelBuilder)
-    // {
-    // }
-
-    // public DbSet<Workout> workouts { get; set; }
-    // public DbSet<Exercise> exercises { get; set; }
-    // public DbSet<Post> fitness_posts { get; set; }
+    public DbSet<Clothing> Clothing => Set<Clothing>();
+    public DbSet<User> Users => Set<User>();
 }
