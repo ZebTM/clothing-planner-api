@@ -3,9 +3,9 @@ using ClothingPlanner.Models;
 
 namespace ClothingPlanner.Repository;
 
-public interface IUserRepository
+public interface IUserClothingRepository
 {
-    IEnumerable<User> GetUsers();
+    IEnumerable<User> GetUserClothingById();
     User GetUserById(Guid id);
     void InsertUser(User user);
     void DeleteUser(Guid id);

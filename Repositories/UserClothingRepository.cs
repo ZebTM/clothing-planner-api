@@ -1,13 +1,14 @@
+
+
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
 
 namespace ClothingPlanner.Repository;
 
-public class UserRepository : IUserRepository
+public class UserClothingRepository : IUserClothingRepository
 {
     private readonly MyDatabaseContext _dbContext;
-
-    public UserRepository(MyDatabaseContext dbContext)
+    public UserClothingRepository(MyDatabaseContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -27,7 +28,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public IEnumerable<User> GetUsers()
+    public IEnumerable<User> GetUserClothingById()
     {
         throw new NotImplementedException();
     }

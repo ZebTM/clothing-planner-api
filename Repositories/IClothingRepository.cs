@@ -2,12 +2,12 @@ using ClothingPlanner.Models;
 
 namespace ClothingPlanner.Repository;
 
-public interface IClothingRepository : IDisposable
+public interface IClothingRepository
 {
     IEnumerable<Clothing> GetClothing();
-    Clothing? GetClothingById(Guid id);
-    void InsertClothingAsync(Clothing clothing);
-    void DeleteClothingAsync(Guid id);
-    void UpdateClothingAsync(Clothing clothing);
-    void SaveAsync();
+    Task<Clothing?> GetClothingByIdAsync(Guid id);
+    void InsertClothing(Clothing clothing);
+    void DeleteClothing(Clothing clothing);
+    void UpdateClothing(Clothing clothing);
+    Task SaveAsync();
 }

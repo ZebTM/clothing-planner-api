@@ -17,5 +17,5 @@ public class Clothing
     [Column("description")]
     public string Description { get; set; } = String.Empty;
     [Column("price")]
-    public float Price { get; set; } = 0;
+    public double Price { get; set; } = 0;
 }

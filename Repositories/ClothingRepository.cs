@@ -1,14 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingPlanner.Repository;
 
-public class ClothingRepository : IClothingRepository, IDisposable
+public class ClothingRepository : IClothingRepository
 {
     private readonly MyDatabaseContext _dbContext;
-    private bool disposedValue;
 
     public ClothingRepository(MyDatabaseContext dbContext)
     {
@@ -21,9 +19,11 @@ public class ClothingRepository : IClothingRepository, IDisposable
         _dbContext.Clothing.Remove(clothing);
     }
 
-    public async Task<IEnumerable<Clothing>> GetClothingAsync()
+    public IEnumerable<Clothing> GetClothing()
     {
-        return await _dbContext.Clothing.ToListAsync();
+        // This is not working for some reason
+        // return await _dbContext.Clothing.ToListAsync();
+        return _dbContext.Clothing.ToList();
     }
 
     public async Task<Clothing?> GetClothingByIdAsync(Guid id)
@@ -41,36 +41,7 @@ public class ClothingRepository : IClothingRepository, IDisposable
         _dbContext.Clothing.Update(clothing);
     }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                // TODO: dispose managed state (managed objects)
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            disposedValue = true;
-        }
-    }
-
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~ClothingRepository()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
-
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    public async void SaveAsync()
+    public async Task SaveAsync()
     {
         await _dbContext.SaveChangesAsync();
     }

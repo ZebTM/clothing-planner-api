@@ -20,4 +20,5 @@ public class MyDatabaseContext : DbContext
 
     public DbSet<Clothing> Clothing => Set<Clothing>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<UserClothing> UserClothing => Set<UserClothing>();
 }

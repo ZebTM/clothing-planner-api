@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ClothingPlanner.Repository;
+using ClothingPlanner.Models;
 
 namespace ClothingPlanner.Controllers;
 
@@ -7,21 +8,23 @@ namespace ClothingPlanner.Controllers;
 [Route("[controller]")]
 public class ClothingController : ControllerBase
 {
-    private IClothingRepository clothingRepository; 
+    private readonly IClothingRepository _clothingRepository; 
     public ClothingController(IClothingRepository clothingRepository)
     {
-        this.clothingRepository = clothingRepository;
+        _clothingRepository = clothingRepository;
     }   
 
     [HttpGet]
-    public async Task<IActionResult> GetClothing()
+    public IActionResult GetClothing()
     {
-        try {
-            return Ok(clothingRepository.GetClothing());
-        } catch (Exception e )
-        {
-            return BadRequest(e);
-        }
+        return Ok(_clothingRepository.GetClothing());
     }
     
+    // [HttpPost]
+    // public async Task<IActionResult> InsertClothing(Clothing clothing)
+    // {
+    //     clothingRepository.InsertClothing(clothing);
+    //     await clothingRepository.SaveAsync();
+    //     return Ok(clothing);
+    // }
 }
