@@ -1,5 +1,6 @@
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingPlanner.Repository;
@@ -13,10 +14,16 @@ public class ClothingRepository : IClothingRepository
         _dbContext = dbContext;
     }
 
-    public void DeleteClothing(Clothing clothing)
+    public Clothing? DeleteClothing(Clothing clothing)
     {
+        Clothing? oldClothing = GetClothingById( clothing.Id );
+        if ( oldClothing != null )
+        {
+            _dbContext.Clothing.Remove(clothing);
+            Save();
+        }
         
-        _dbContext.Clothing.Remove(clothing);
+        return clothing;
     }
 
     public IEnumerable<Clothing> GetClothing()
@@ -26,23 +33,36 @@ public class ClothingRepository : IClothingRepository
         return _dbContext.Clothing.ToList();
     }
 
-    public async Task<Clothing?> GetClothingByIdAsync(Guid id)
+    public Clothing? GetClothingById(Guid id)
     {
-        return await _dbContext.Clothing.FindAsync(id);
+        return _dbContext.Clothing.Find(id);
     }
 
-    public  void InsertClothing(Clothing clothing)
+    public Clothing InsertClothing(Clothing clothing)
     {
         _dbContext.Add(clothing);
+        Save();
+        return clothing;
     }
 
-    public void UpdateClothing(Clothing clothing)
+    public Clothing UpdateClothing(Clothing clothing)
     {
-        _dbContext.Clothing.Update(clothing);
+        Clothing? oldClothing = _dbContext.Clothing.Find(clothing.Id);
+
+        if ( oldClothing == null)
+        {
+            _dbContext.Clothing.Add(clothing);
+        } else
+        {
+            _dbContext.Clothing.Update(clothing);
+        }
+        Save();
+
+        return clothing;
     }
 
-    public async Task SaveAsync()
+    private void Save()
     {
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
     }
 }

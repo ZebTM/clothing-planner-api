@@ -6,10 +6,12 @@ namespace ClothingPlanner.Repository;
 public class UserRepository : IUserRepository
 {
     private readonly MyDatabaseContext _dbContext;
+    private readonly ClothingRepository _clothingRepository;
 
-    public UserRepository(MyDatabaseContext dbContext)
+    public UserRepository(MyDatabaseContext dbContext, ClothingRepository clothingRepository)
     {
         _dbContext = dbContext;
+        _clothingRepository = clothingRepository;
     }
 
     public void AddUserClothing(Guid userId, Clothing clothing)
@@ -17,24 +19,34 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public void DeleteUser(Guid id)
+    public User? DeleteUser(Guid id)
     {
-        throw new NotImplementedException();
+        User? user = _dbContext.Users.Find(id);
+
+        if ( user != null )
+        {
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
+        };
+
+        return user;
     }
 
-    public User GetUserById(Guid id)
+    public User? GetUserById(Guid id)
     {
-        throw new NotImplementedException();
+        return _dbContext.Users.Find(id);
     }
 
     public IEnumerable<User> GetUsers()
     {
-        throw new NotImplementedException();
+        return _dbContext.Users.ToList();
     }
 
-    public void InsertUser(User user)
+    public User InsertUser(User user)
     {
-        throw new NotImplementedException();
+        _dbContext.Users.Add(user);
+        _dbContext.SaveChanges();
+        return user;
     }
 
     public void RemoveUserClothing(Guid userId, Guid clothingId)
@@ -42,8 +54,10 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public void UpdateUser(User user)
+    public User UpdateUser(User user)
     {
-        throw new NotImplementedException();
+        _dbContext.Users.Update(user);
+        _dbContext.SaveChanges();
+        return user;
     }
 }

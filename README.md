@@ -13,3 +13,10 @@ This will be a clothing planner web app to track future purchases.
 - .NET
 - React
 
+
+### TODO
+ CRUD Functionality of
+    Clothes
+    Users
+    
+

@@ -20,28 +20,32 @@ public class UserController : ControllerBase
         return Ok(_userRepository.GetUsers());
     }
 
-    [HttpGet]
+    [HttpGet("id")]
     public async Task<IActionResult> GetUserById(Guid id)
     {
-        throw new NotImplementedException();
+        User? user = _userRepository.GetUserById(id);
+        return Ok(user);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateUser(User user)
     {
-        throw new NotImplementedException();
+        _userRepository.InsertUser(user);
+        return Ok(user);
     }
 
     [HttpPut]
     public async Task<IActionResult> EditUser(User user)
     {
-        throw new NotImplementedException();
+        _userRepository.UpdateUser(user);
+        return Ok(user);
     }
 
     [HttpDelete]
     public async Task<IActionResult> DeleteUser(User user)
     {
-        throw new NotImplementedException();
+        var tmp = _userRepository.DeleteUser(user.Id);
+        return Ok(tmp);
     }
     
 }

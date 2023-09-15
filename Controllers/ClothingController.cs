@@ -17,14 +17,12 @@ public class ClothingController : ControllerBase
     [HttpGet]
     public IActionResult GetClothing()
     {
-        return Ok(_clothingRepository.GetClothing());
+        return Ok( _clothingRepository.GetClothing() );
     }
     
-    // [HttpPost]
-    // public async Task<IActionResult> InsertClothing(Clothing clothing)
-    // {
-    //     clothingRepository.InsertClothing(clothing);
-    //     await clothingRepository.SaveAsync();
-    //     return Ok(clothing);
-    // }
+    [HttpGet("id")]
+    public IActionResult GetClothingById(Guid id)
+    {
+        return Ok( _clothingRepository.GetClothingById( id ) );
+    }
 }

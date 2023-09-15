@@ -5,9 +5,8 @@ namespace ClothingPlanner.Repository;
 public interface IClothingRepository
 {
     IEnumerable<Clothing> GetClothing();
-    Task<Clothing?> GetClothingByIdAsync(Guid id);
-    void InsertClothing(Clothing clothing);
-    void DeleteClothing(Clothing clothing);
-    void UpdateClothing(Clothing clothing);
-    Task SaveAsync();
+    Clothing? GetClothingById(Guid id);
+    Clothing InsertClothing(Clothing clothing);
+    Clothing? DeleteClothing(Clothing clothing);
+    Clothing UpdateClothing(Clothing clothing);
 }
