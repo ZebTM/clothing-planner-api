@@ -13,38 +13,32 @@ public class UserClothingRepository : IUserClothingRepository
         _dbContext = dbContext;
     }
 
-    public void AddUserClothing(Guid userId, Clothing clothing)
+    public UserClothing AddUserClothing(UserClothing userClothing)
     {
-        throw new NotImplementedException();
+        _dbContext.UserClothing.Add(userClothing);
+        Save();
+
+        return userClothing;
     }
 
-    public void DeleteUser(Guid id)
+    public UserClothing? FindUserClothing(UserClothing userClothing)
     {
-        throw new NotImplementedException();
+        return _dbContext.UserClothing.Find(userClothing.UsersId, userClothing.ClothingId);
     }
 
-    public User GetUserById(Guid id)
+    public UserClothing? RemoveUserClothing(UserClothing userClothing)
     {
-        throw new NotImplementedException();
+        UserClothing? oldUserClothing = FindUserClothing(userClothing);
+        if ( oldUserClothing != null )
+        {
+            _dbContext.UserClothing.Remove(oldUserClothing);
+            Save();
+        }
+        
+        return oldUserClothing;
     }
-
-    public IEnumerable<User> GetUserClothingById()
+    private void Save()
     {
-        throw new NotImplementedException();
-    }
-
-    public void InsertUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveUserClothing(Guid userId, Guid clothingId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateUser(User user)
-    {
-        throw new NotImplementedException();
+        _dbContext.SaveChanges();
     }
 }

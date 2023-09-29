@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ClothingPlanner.Repository;
 using ClothingPlanner.Models;
+using ClothingPlanner.Services;
 
 namespace ClothingPlanner.Controllers;
 
@@ -9,43 +10,48 @@ namespace ClothingPlanner.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository; 
-    public UserController(IUserRepository userRepository)
+    private readonly IUserService _userService;
+    public UserController(IUserRepository userRepository, IUserService userService)
     {
         _userRepository = userRepository;
-    }   
+        _userService = userService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
-        return Ok(_userRepository.GetUsers());
+        return Ok(_userService.GetUsers());
     }
 
     [HttpGet("id")]
     public async Task<IActionResult> GetUserById(Guid id)
     {
-        User? user = _userRepository.GetUserById(id);
-        return Ok(user);
+        return Ok(_userService.GetUserById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(User user)
+    public async Task<IActionResult> CreateUser(CreateUser user)
     {
-        _userRepository.InsertUser(user);
-        return Ok(user);
+        return Ok(_userService.CreateUser(user));
     }
 
     [HttpPut]
-    public async Task<IActionResult> EditUser(User user)
+    public async Task<IActionResult> EditUser(SanitizedUser user)
     {
-        _userRepository.UpdateUser(user);
+        _userService.EditUser(user);
         return Ok(user);
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteUser(User user)
+    public async Task<IActionResult> DeleteUser(SanitizedUser user)
     {
-        var tmp = _userRepository.DeleteUser(user.Id);
+        var tmp = _userService.DeleteUser(user);
         return Ok(tmp);
     }
     
+    [HttpPut]
+    public async Task<IActionResult> ResetUserPassword(Guid id, string password)
+    {
+        throw new NotImplementedException();
+    }
 }

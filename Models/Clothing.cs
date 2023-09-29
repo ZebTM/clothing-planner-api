@@ -18,4 +18,6 @@ public class Clothing
     public string Description { get; set; } = String.Empty;
     [Column("price")]
     public double Price { get; set; } = 0;
+    public IEnumerable<UserClothing> UserClothing { get; } = new List<UserClothing>();
+    public IEnumerable<User> Users { get; } = new List<User>();
 }

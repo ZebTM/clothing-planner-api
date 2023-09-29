@@ -15,12 +15,13 @@ public class ClothingService : IClothingService
         _clothingRepository = clothingRepository;
         _userRepository = userRepository;
     }
-    public Task<Clothing> DeleteUserClothing(Guid userId, Clothing clothing)
+    
+    public Clothing DeleteUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Clothing> EditUserClothing(Guid userId, Clothing clothing)
+    public Clothing EditUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
     }
@@ -30,12 +31,12 @@ public class ClothingService : IClothingService
         throw new NotImplementedException();
     }
 
-    public Task<Clothing?> GetClothingById(Guid id)
+    public Clothing? GetClothingById(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Clothing> InsertUserClothing(Guid userId, Clothing clothing)
+    public Clothing InsertUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
     }

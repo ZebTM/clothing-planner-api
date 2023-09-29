@@ -4,9 +4,9 @@ namespace ClothingPlanner.Services;
 
 public interface IUserService
 {
-    Task<IEnumerable<User>> GetUsersAsync();
-    Task<User?> GetUserById(Guid id);
-    Task<User> CreateUser(User user);
-    Task<User> EditUser(User user);
-    Task<User> DeleteUser(User user);
+    IEnumerable<SanitizedUser> GetUsers();
+    SanitizedUser? GetUserById(Guid id);
+    SanitizedUser CreateUser(CreateUser user);
+    SanitizedUser EditUser(SanitizedUser user);
+    SanitizedUser? DeleteUser(SanitizedUser user);
 }

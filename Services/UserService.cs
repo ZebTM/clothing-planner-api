@@ -1,32 +1,48 @@
-
 using ClothingPlanner.Models;
+using ClothingPlanner.Repository;
+using ClothingPlanner.Services.Util;
 
 namespace ClothingPlanner.Services;
 
 public class UserService : IUserService
 {
-    public Task<User> CreateUser(User user)
+    private readonly IUserRepository _userRepository;
+    public UserService(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
     }
 
-    public Task<User> DeleteUser(User user)
+    public SanitizedUser CreateUser(CreateUser user)
     {
-        throw new NotImplementedException();
+        User createdUser = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Username = user.Username,
+            HashedPassword = PasswordHashingService.Hash( user.Password ) 
+        };
+
+        return _userRepository.InsertUser(createdUser);
     }
 
-    public Task<User> EditUser(User user)
+    public SanitizedUser? DeleteUser(SanitizedUser user)
     {
-        throw new NotImplementedException();
+        return _userRepository.DeleteUser( user.Id );
     }
 
-    public Task<User?> GetUserById(Guid id)
+    public SanitizedUser EditUser(SanitizedUser user)
     {
-        throw new NotImplementedException();
+        return _userRepository.UpdateUser(user);
     }
 
-    public Task<IEnumerable<User>> GetUsersAsync()
+    public SanitizedUser? GetUserById(Guid id)
     {
-        throw new NotImplementedException();
+        return _userRepository.GetUserById(id);
+    }
+
+    public IEnumerable<SanitizedUser> GetUsers()
+    {
+        return _userRepository.GetUsers();
     }
 }
