@@ -49,8 +49,8 @@ public class UserController : ControllerBase
         return Ok(tmp);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> ResetUserPassword(Guid id, string password)
+    [HttpPut("id")]
+    public async Task<IActionResult> ResetUserPassword(string password)
     {
         throw new NotImplementedException();
     }

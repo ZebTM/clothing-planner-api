@@ -9,4 +9,5 @@ public interface IClothingRepository
     Clothing InsertClothing(Clothing clothing);
     Clothing? DeleteClothing(Clothing clothing);
     Clothing UpdateClothing(Clothing clothing);
+    Clothing? GetClothingByLink(Uri? link);
 }

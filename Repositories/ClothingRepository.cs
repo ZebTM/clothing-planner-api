@@ -61,6 +61,11 @@ public class ClothingRepository : IClothingRepository
         return clothing;
     }
 
+    public Clothing? GetClothingByLink(Uri? link)
+    {
+        return null;
+    }
+
     private void Save()
     {
         _dbContext.SaveChanges();

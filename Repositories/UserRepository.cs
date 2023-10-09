@@ -1,5 +1,6 @@
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingPlanner.Repository;
 
@@ -34,25 +35,34 @@ public class UserRepository : IUserRepository
 
     public SanitizedUser? GetUserById(Guid id)
     {
-        User? user = _dbContext.Users.Find(id);
+        return _dbContext.Users.Where(u => u.Id == id)
+            .Select( u => new SanitizedUser(u))
+            .FirstOrDefault();
     }
 
     public IEnumerable<SanitizedUser> GetUsers()
     {
-        return _dbContext.Users.ToList();
+        return _dbContext.Users
+            .Select(u => new SanitizedUser(u))
+            .ToList();
     }
 
     public SanitizedUser InsertUser(User user)
     {
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
-        return user;
+        return new SanitizedUser(user);
     }
 
     public SanitizedUser UpdateUser(SanitizedUser user)
-    {
-        _dbContext.Users.Update(user);
-        _dbContext.SaveChanges();
+    {   
+        _dbContext.Users.Where(u => u.Id == user.Id)
+            .ExecuteUpdate(u => u
+                .SetProperty( u => u.FirstName, user.FirstName)
+                .SetProperty( u => u.LastName, user.LastName)
+                .SetProperty( u => u.Username, user.Username)
+            );
+            
         return user;
     }
 }

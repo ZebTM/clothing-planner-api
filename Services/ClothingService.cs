@@ -28,16 +28,40 @@ public class ClothingService : IClothingService
 
     public IEnumerable<Clothing> GetAllClothing()
     {
-        throw new NotImplementedException();
+        return _clothingRepository.GetClothing();
     }
 
     public Clothing? GetClothingById(Guid id)
     {
-        throw new NotImplementedException();
+        return _clothingRepository.GetClothingById(id);
     }
 
-    public Clothing InsertUserClothing(Guid userId, Clothing clothing)
+    public Clothing InsertUserClothing(Guid userId, CreateClothing newClothing)
     {
-        throw new NotImplementedException();
+        Clothing? existingClothing = _clothingRepository.GetClothingByLink(newClothing.OriginalLink);
+
+        if (existingClothing != null)
+        {
+            existingClothing = new Clothing
+            {
+                Id = Guid.NewGuid(),
+                OriginalLink = newClothing.OriginalLink,
+                Image = newClothing.Image,
+                Title = newClothing.Title,
+                Description = newClothing.Description,
+                Price = newClothing.Price
+            };
+            _clothingRepository.InsertClothing(existingClothing);
+        }
+        
+        UserClothing userClothing = new UserClothing
+        {
+            ClothingId = existingClothing.Id,
+            UsersId = userId
+        };
+
+        _userClothingRepository.AddUserClothing(userClothing);
+
+        return existingClothing;
     }
 }
