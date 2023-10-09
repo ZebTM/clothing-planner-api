@@ -1,79 +1,68 @@
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingPlanner.Repository;
 
-public class UserRepository : IUserRepository, IDisposable
+public class UserRepository : IUserRepository
 {
     private readonly MyDatabaseContext _dbContext;
-    private bool disposedValue;
 
     public UserRepository(MyDatabaseContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public void AddUserClothing(Guid userId, Clothing clothing)
+    public SanitizedUser? DeleteUser(Guid id)
     {
-        throw new NotImplementedException();
-    }
+        User? user = _dbContext.Users.Find(id);
 
-    public void DeleteUser(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public User GetUserById(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<User> GetUsers()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void InsertUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveUserClothing(Guid userId, Guid clothingId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
+        if ( user != null )
         {
-            if (disposing)
-            {
-                // TODO: dispose managed state (managed objects)
-            }
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
+        };  
 
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            disposedValue = true;
-        }
+        if ( user == null)
+        {
+            return null;
+        }  
+
+        SanitizedUser sanitizedUser = new SanitizedUser(user);
+
+        return sanitizedUser;
     }
 
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~UserRepository()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
-
-    public void Dispose()
+    public SanitizedUser? GetUserById(Guid id)
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        return _dbContext.Users.Where(u => u.Id == id)
+            .Select( u => new SanitizedUser(u))
+            .FirstOrDefault();
+    }
+
+    public IEnumerable<SanitizedUser> GetUsers()
+    {
+        return _dbContext.Users
+            .Select(u => new SanitizedUser(u))
+            .ToList();
+    }
+
+    public SanitizedUser InsertUser(User user)
+    {
+        _dbContext.Users.Add(user);
+        _dbContext.SaveChanges();
+        return new SanitizedUser(user);
+    }
+
+    public SanitizedUser UpdateUser(SanitizedUser user)
+    {   
+        _dbContext.Users.Where(u => u.Id == user.Id)
+            .ExecuteUpdate(u => u
+                .SetProperty( u => u.FirstName, user.FirstName)
+                .SetProperty( u => u.LastName, user.LastName)
+                .SetProperty( u => u.Username, user.Username)
+            );
+            
+        return user;
     }
 }

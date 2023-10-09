@@ -17,5 +17,16 @@ public class Clothing
     [Column("description")]
     public string Description { get; set; } = String.Empty;
     [Column("price")]
-    public float Price { get; set; } = 0;
+    public double Price { get; set; } = 0;
+    public IEnumerable<UserClothing> UserClothing { get; } = new List<UserClothing>();
+    public IEnumerable<User> Users { get; } = new List<User>();
+}
+
+public class CreateClothing
+{
+    public Uri? OriginalLink { get; set; } = null;
+    public Uri? Image { get; set; } = null;
+    public string Title { get; set; } = String.Empty;
+    public string Description { get; set; } = String.Empty;
+    public double Price { get; set; } = 0;
 }

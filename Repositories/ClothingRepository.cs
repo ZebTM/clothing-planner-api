@@ -1,77 +1,73 @@
-using Microsoft.AspNetCore.Mvc;
 using ClothingPlanner.DatabaseContext;
 using ClothingPlanner.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingPlanner.Repository;
 
-public class ClothingRepository : IClothingRepository, IDisposable
+public class ClothingRepository : IClothingRepository
 {
     private readonly MyDatabaseContext _dbContext;
-    private bool disposedValue;
 
     public ClothingRepository(MyDatabaseContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public void DeleteClothing(Clothing clothing)
+    public Clothing? DeleteClothing(Clothing clothing)
     {
+        Clothing? oldClothing = GetClothingById( clothing.Id );
+        if ( oldClothing != null )
+        {
+            _dbContext.Clothing.Remove(clothing);
+            Save();
+        }
         
-        _dbContext.Clothing.Remove(clothing);
+        return clothing;
     }
 
-    public async Task<IEnumerable<Clothing>> GetClothingAsync()
+    public IEnumerable<Clothing> GetClothing()
     {
-        return await _dbContext.Clothing.ToListAsync();
+        // This is not working for some reason
+        // return await _dbContext.Clothing.ToListAsync();
+        return _dbContext.Clothing.ToList();
     }
 
-    public async Task<Clothing?> GetClothingByIdAsync(Guid id)
+    public Clothing? GetClothingById(Guid id)
     {
-        return await _dbContext.Clothing.FindAsync(id);
+        return _dbContext.Clothing.Find(id);
     }
 
-    public  void InsertClothing(Clothing clothing)
+    public Clothing InsertClothing(Clothing clothing)
     {
         _dbContext.Add(clothing);
+        Save();
+        return clothing;
     }
 
-    public void UpdateClothing(Clothing clothing)
+    public Clothing UpdateClothing(Clothing clothing)
     {
-        _dbContext.Clothing.Update(clothing);
-    }
+        Clothing? oldClothing = _dbContext.Clothing.Find(clothing.Id);
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
+        if ( oldClothing == null)
         {
-            if (disposing)
-            {
-                // TODO: dispose managed state (managed objects)
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            disposedValue = true;
+            _dbContext.Clothing.Add(clothing);
+        } else
+        {
+            _dbContext.Clothing.Update(clothing);
         }
+        Save();
+
+        return clothing;
     }
 
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~ClothingRepository()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
-
-    public void Dispose()
+    public Clothing? GetClothingByLink(Uri? link)
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        return null;
     }
 
-    public async void SaveAsync()
+    private void Save()
     {
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
     }
 }
