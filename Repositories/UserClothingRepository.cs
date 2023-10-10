@@ -16,14 +16,14 @@ public class UserClothingRepository : IUserClothingRepository
     public UserClothing AddUserClothing(UserClothing userClothing)
     {
         _dbContext.UserClothing.Add(userClothing);
-        Save();
+        _dbContext.SaveChanges();
 
         return userClothing;
     }
 
     public UserClothing? FindUserClothing(UserClothing userClothing)
     {
-        return _dbContext.UserClothing.Find(userClothing.UsersId, userClothing.ClothingId);
+        return _dbContext.UserClothing.Find(userClothing.users_id, userClothing.clothing_id);
     }
 
     public UserClothing? RemoveUserClothing(UserClothing userClothing)

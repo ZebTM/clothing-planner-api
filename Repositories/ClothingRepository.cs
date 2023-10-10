@@ -62,8 +62,8 @@ public class ClothingRepository : IClothingRepository
     }
 
     public Clothing? GetClothingByLink(Uri? link)
-    {
-        return null;
+    {   
+        return _dbContext.Clothing.Where(c => c.OriginalLink == link ).First();
     }
 
     private void Save()

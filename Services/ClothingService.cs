@@ -40,28 +40,35 @@ public class ClothingService : IClothingService
     {
         Clothing? existingClothing = _clothingRepository.GetClothingByLink(newClothing.OriginalLink);
 
-        if (existingClothing != null)
+
+        Clothing clothing = existingClothing != null ? existingClothing : new Clothing
         {
-            existingClothing = new Clothing
-            {
-                Id = Guid.NewGuid(),
-                OriginalLink = newClothing.OriginalLink,
-                Image = newClothing.Image,
-                Title = newClothing.Title,
-                Description = newClothing.Description,
-                Price = newClothing.Price
-            };
-            _clothingRepository.InsertClothing(existingClothing);
+            Id = Guid.NewGuid(),
+            OriginalLink = newClothing.OriginalLink,
+            Image = newClothing.Image,
+            Title = newClothing.Title,
+            Description = newClothing.Description,
+            Price = newClothing.Price
+        };
+
+        if (existingClothing == null)
+        {
+            _clothingRepository.InsertClothing(clothing);
         }
         
         UserClothing userClothing = new UserClothing
         {
-            ClothingId = existingClothing.Id,
-            UsersId = userId
+            clothing_id = clothing.Id,
+            users_id = userId
         };
 
-        _userClothingRepository.AddUserClothing(userClothing);
+        UserClothing? existingRelation = _userClothingRepository.FindUserClothing(userClothing);
 
-        return existingClothing;
+        if ( existingRelation == null)
+        {
+            _userClothingRepository.AddUserClothing(userClothing);
+        }
+
+        return clothing;
     }
 }
