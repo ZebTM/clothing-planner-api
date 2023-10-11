@@ -20,7 +20,6 @@ builder.Services.AddScoped<IUserClothingRepository, UserClothingRepository>();
 builder.Services.AddCors();
 builder.Services.AddDbContext<MyDatabaseContext>();
 
-
 var app = builder.Build();
  
 app.UseCors(x => x
