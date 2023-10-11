@@ -26,11 +26,21 @@ public class ClothingRepository : IClothingRepository
         return clothing;
     }
 
-    public IEnumerable<Clothing> GetClothing()
+    public IEnumerable<ClothingViewModel> GetClothing()
     {
         // This is not working for some reason
         // return await _dbContext.Clothing.ToListAsync();
-        return _dbContext.Clothing.ToList();
+        return _dbContext.Clothing.Where(c => c.Id != null)
+            .Select(c => new ClothingViewModel
+                {               
+                    Id = c.Id,
+                    OriginalLink = c.OriginalLink,
+                    Image = c.Image,
+                    Title = c.Title,
+                    Description = c.Description,
+                    Price = c.Price
+                }  
+            ).ToList();
     }
 
     public Clothing? GetClothingById(Guid id)
@@ -63,7 +73,7 @@ public class ClothingRepository : IClothingRepository
 
     public Clothing? GetClothingByLink(Uri? link)
     {   
-        return _dbContext.Clothing.Where(c => c.OriginalLink == link ).First();
+        return _dbContext.Clothing.Where(c => c.OriginalLink == link ).FirstOrDefault();
     }
 
     private void Save()

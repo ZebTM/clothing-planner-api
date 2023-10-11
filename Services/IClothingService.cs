@@ -4,10 +4,10 @@ namespace ClothingPlanner.Services;
 
 public interface IClothingService
 {
-    IEnumerable<Clothing> GetAllClothing();
-    Clothing? GetClothingById(Guid id);
-    Clothing InsertUserClothing(Guid userId, CreateClothing clothing);
-    Clothing DeleteUserClothing(Guid userId, Clothing clothing);
-    Clothing EditUserClothing(Guid userId, Clothing clothing);
+    IEnumerable<ClothingViewModel> GetAllClothing();
+    ClothingViewModel? GetClothingById(Guid id);
+    ClothingViewModel InsertUserClothing(Guid userId, CreateClothing clothing);
+    ClothingViewModel DeleteUserClothing(Guid userId, Clothing clothing);
+    ClothingViewModel EditUserClothing(Guid userId, Clothing clothing);
     
 }

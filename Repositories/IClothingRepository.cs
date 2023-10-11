@@ -4,7 +4,7 @@ namespace ClothingPlanner.Repository;
 
 public interface IClothingRepository
 {
-    IEnumerable<Clothing> GetClothing();
+    IEnumerable<ClothingViewModel> GetClothing();
     Clothing? GetClothingById(Guid id);
     Clothing InsertClothing(Clothing clothing);
     Clothing? DeleteClothing(Clothing clothing);

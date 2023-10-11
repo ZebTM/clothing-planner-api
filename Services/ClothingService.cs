@@ -16,27 +16,41 @@ public class ClothingService : IClothingService
         _userRepository = userRepository;
     }
     
-    public Clothing DeleteUserClothing(Guid userId, Clothing clothing)
+    public ClothingViewModel DeleteUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
     }
 
-    public Clothing EditUserClothing(Guid userId, Clothing clothing)
+    public ClothingViewModel EditUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Clothing> GetAllClothing()
+    public IEnumerable<ClothingViewModel> GetAllClothing()
     {
         return _clothingRepository.GetClothing();
     }
 
-    public Clothing? GetClothingById(Guid id)
+    public ClothingViewModel? GetClothingById(Guid id)
     {
-        return _clothingRepository.GetClothingById(id);
+        Clothing? clothing = _clothingRepository.GetClothingById(id);
+        if ( clothing == null )
+        {
+            return null;
+        }
+
+        return new ClothingViewModel
+        {
+            Id = clothing.Id,
+            OriginalLink = clothing.OriginalLink,
+            Image = clothing.Image,
+            Title = clothing.Title,
+            Description = clothing.Description,
+            Price = clothing.Price
+        };
     }
 
-    public Clothing InsertUserClothing(Guid userId, CreateClothing newClothing)
+    public ClothingViewModel InsertUserClothing(Guid userId, CreateClothing newClothing)
     {
         Clothing? existingClothing = _clothingRepository.GetClothingByLink(newClothing.OriginalLink);
 
@@ -69,6 +83,14 @@ public class ClothingService : IClothingService
             _userClothingRepository.AddUserClothing(userClothing);
         }
 
-        return clothing;
+        return new ClothingViewModel
+        {
+            Id = clothing.Id,
+            OriginalLink = clothing.OriginalLink,
+            Image = clothing.Image,
+            Title = clothing.Title,
+            Description = clothing.Description,
+            Price = clothing.Price
+        };
     }
 }
