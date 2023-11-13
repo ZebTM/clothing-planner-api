@@ -15,8 +15,7 @@ public class User
     public string Username { get; set; } = String.Empty;
     [Column("hashed_password")]
     public string HashedPassword { get; set; } = String.Empty;
-    public IEnumerable<UserClothing> UserClothing { get; } = new List<UserClothing>();
-    public IEnumerable<Clothing> Clothing { get; } = new List<Clothing>();
+    public virtual ICollection<Clothing> Clothing { get; set; } = new HashSet<Clothing>();
 }
 
 public class CreateUser

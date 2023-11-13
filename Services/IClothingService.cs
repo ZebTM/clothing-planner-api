@@ -6,8 +6,7 @@ public interface IClothingService
 {
     IEnumerable<ClothingViewModel> GetAllClothing();
     ClothingViewModel? GetClothingById(Guid id);
+    IEnumerable<ClothingViewModel> GetClothingByUserId(Guid userId);
     ClothingViewModel InsertUserClothing(Guid userId, CreateClothing clothing);
-    ClothingViewModel DeleteUserClothing(Guid userId, Clothing clothing);
-    ClothingViewModel EditUserClothing(Guid userId, Clothing clothing);
-    
+    UserClothing? DeleteUserClothing(Guid userId, Clothing clothing);
 }

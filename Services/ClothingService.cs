@@ -7,23 +7,22 @@ namespace ClothingPlanner.Services;
 public class ClothingService : IClothingService
 {
     private readonly IClothingRepository _clothingRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IUserClothingRepository _userClothingRepository;
-    public ClothingService(IClothingRepository clothingRepository, IUserRepository userRepository, IUserClothingRepository userClothingRepository)
+    // private readonly IUserClothingRepository _userClothingRepository;
+    public ClothingService(IClothingRepository clothingRepository)
     {
-        _userClothingRepository = userClothingRepository;
         _clothingRepository = clothingRepository;
-        _userRepository = userRepository;
     }
     
-    public ClothingViewModel DeleteUserClothing(Guid userId, Clothing clothing)
+    public UserClothing? DeleteUserClothing(Guid userId, Clothing clothing)
     {
         throw new NotImplementedException();
-    }
+        UserClothing userClothing = new UserClothing
+        {
+            users_id = userId,
+            clothing_id = clothing.Id
+        };
 
-    public ClothingViewModel EditUserClothing(Guid userId, Clothing clothing)
-    {
-        throw new NotImplementedException();
+        // return _userClothingRepository.RemoveUserClothing(userClothing);
     }
 
     public IEnumerable<ClothingViewModel> GetAllClothing()
@@ -69,19 +68,11 @@ public class ClothingService : IClothingService
         {
             _clothingRepository.InsertClothing(clothing);
         }
-        
-        UserClothing userClothing = new UserClothing
+
+        if ( _clothingRepository.DoesUserHaveSpecificClothing(userId, clothing.Id))
         {
-            clothing_id = clothing.Id,
-            users_id = userId
+            // _userClothingRepository.AddUserClothing(userClothing);
         };
-
-        UserClothing? existingRelation = _userClothingRepository.FindUserClothing(userClothing);
-
-        if ( existingRelation == null)
-        {
-            _userClothingRepository.AddUserClothing(userClothing);
-        }
 
         return new ClothingViewModel
         {
@@ -92,5 +83,10 @@ public class ClothingService : IClothingService
             Description = clothing.Description,
             Price = clothing.Price
         };
+    }
+
+    public IEnumerable<ClothingViewModel> GetClothingByUserId(Guid userId)
+    {
+        return _clothingRepository.GetClothingByUserId(userId);
     }
 }

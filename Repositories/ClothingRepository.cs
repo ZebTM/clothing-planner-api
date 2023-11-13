@@ -19,7 +19,7 @@ public class ClothingRepository : IClothingRepository
         Clothing? oldClothing = GetClothingById( clothing.Id );
         if ( oldClothing != null )
         {
-            _dbContext.Clothing.Remove(clothing);
+            _dbContext.Clothings.Remove(clothing);
             Save();
         }
         
@@ -30,7 +30,7 @@ public class ClothingRepository : IClothingRepository
     {
         // This is not working for some reason
         // return await _dbContext.Clothing.ToListAsync();
-        return _dbContext.Clothing.Where(c => c.Id != null)
+        return _dbContext.Clothings.Where(c => c.Id != null)
             .Select(c => new ClothingViewModel
                 {               
                     Id = c.Id,
@@ -45,7 +45,7 @@ public class ClothingRepository : IClothingRepository
 
     public Clothing? GetClothingById(Guid id)
     {
-        return _dbContext.Clothing.Find(id);
+        return _dbContext.Clothings.Find(id);
     }
 
     public Clothing InsertClothing(Clothing clothing)
@@ -57,14 +57,14 @@ public class ClothingRepository : IClothingRepository
 
     public Clothing UpdateClothing(Clothing clothing)
     {
-        Clothing? oldClothing = _dbContext.Clothing.Find(clothing.Id);
+        Clothing? oldClothing = _dbContext.Clothings.Find(clothing.Id);
 
         if ( oldClothing == null)
         {
-            _dbContext.Clothing.Add(clothing);
+            _dbContext.Clothings.Add(clothing);
         } else
         {
-            _dbContext.Clothing.Update(clothing);
+            _dbContext.Clothings.Update(clothing);
         }
         Save();
 
@@ -73,11 +73,35 @@ public class ClothingRepository : IClothingRepository
 
     public Clothing? GetClothingByLink(Uri? link)
     {   
-        return _dbContext.Clothing.Where(c => c.OriginalLink == link ).FirstOrDefault();
+        return _dbContext.Clothings.Where(c => c.OriginalLink == link ).FirstOrDefault();
     }
 
     private void Save()
     {
         _dbContext.SaveChanges();
+    }
+
+    public IEnumerable<ClothingViewModel> GetClothingByUserId(Guid userId)
+    {
+        IEnumerable<ClothingViewModel> test = from user in _dbContext.Users
+            where user.Id == userId
+            from clothing in user.Clothing
+            select new ClothingViewModel
+            {
+                Id = clothing.Id,
+                OriginalLink = clothing.OriginalLink,
+                Image = clothing.Image,
+                Title = clothing.Title,
+                Description = clothing.Description,
+                Price = clothing.Price,
+
+            };
+        
+        return test.ToList();
+    }
+
+    public Boolean DoesUserHaveSpecificClothing(Guid userId, Guid clothingId)
+    {
+        return false;
     }
 }

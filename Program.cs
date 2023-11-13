@@ -12,10 +12,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IClothingRepository, ClothingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserClothingRepository, UserClothingRepository>();
+// builder.Services.AddScoped<IUserClothingRepository, UserClothingRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IClothingService, ClothingService>();
-builder.Services.AddScoped<IUserClothingRepository, UserClothingRepository>();
+// builder.Services.AddScoped<IUserClothingRepository, UserClothingRepository>();
 
 builder.Services.AddCors();
 builder.Services.AddDbContext<MyDatabaseContext>();

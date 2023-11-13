@@ -32,4 +32,10 @@ public class ClothingController : ControllerBase
     {
         return Ok( _clothingService.InsertUserClothing(userId, clothing) );
     }
+
+    [HttpDelete]
+    public IActionResult DeleteClothing(Clothing clothing, Guid userId )
+    {
+        return Ok( _clothingService.DeleteUserClothing(userId, clothing) );
+    }
 }

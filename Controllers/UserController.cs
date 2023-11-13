@@ -9,11 +9,11 @@ namespace ClothingPlanner.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository; 
+    private readonly IClothingService _clothingService; 
     private readonly IUserService _userService;
-    public UserController(IUserRepository userRepository, IUserService userService)
+    public UserController(IClothingService clothingService, IUserService userService)
     {
-        _userRepository = userRepository;
+        _clothingService = clothingService;
         _userService = userService;
     }
 
@@ -53,5 +53,11 @@ public class UserController : ControllerBase
     public async Task<IActionResult> ResetUserPassword(string password)
     {
         throw new NotImplementedException();
+    }
+
+    [HttpGet("id/clothing")]
+    public async Task<IActionResult> GetUserClothing(Guid id)
+    {
+        return Ok(_clothingService.GetClothingByUserId(id));
     }
 }

@@ -10,4 +10,6 @@ public interface IClothingRepository
     Clothing? DeleteClothing(Clothing clothing);
     Clothing UpdateClothing(Clothing clothing);
     Clothing? GetClothingByLink(Uri? link);
+    IEnumerable<ClothingViewModel> GetClothingByUserId(Guid userId);
+    Boolean DoesUserHaveSpecificClothing(Guid userId, Guid clothingId);
 }
